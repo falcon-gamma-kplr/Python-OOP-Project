@@ -1,6 +1,7 @@
-# nous allons a présent utiliser la classe Tree de la librairie treelib pour construire un arbdre de donnée
+# nous allons a présent utiliser la classe Tree de la librairie treelib pour construire un arbre de donnée
 
 from treelib import Tree
+import math
 
 def create_tree_from_dict(tree, parent_node_id, parent_dict):
     for key, value in parent_dict.items():
@@ -20,8 +21,8 @@ def create_tree_from_dict(tree, parent_node_id, parent_dict):
 my_dict = {
     "cle1": {
         "souscle1": "valeur1",
-        "souscle2": "valeur2",
-        "souscle3": "valeur3"
+        "souscle2": {1: "valeur2_1", 2: "valeur2_2", "toto": "tutu", "le_chat": "miaou"},
+        "souscle3": math.pi
     },
     "cle2": "valeur4",
     "cle3": {
