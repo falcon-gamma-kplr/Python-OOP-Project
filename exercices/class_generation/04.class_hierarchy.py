@@ -1,21 +1,22 @@
 # Import des modules nécessaires
 import json
 from unidecode import unidecode
-import re
+import re, os
+from  class_generation import generate_class_def
 
 # Charger des données JSON à partir du fichier dans un dictionnaire python
 local_path = os.path.dirname(os.path.abspath(__file__))
-json_data = json.load(open(os.path.join(local_path, 'json_data.json'), "rb"))
+json_dict = json.load(open(os.path.join(local_path, 'json_data.json'), "r", encoding="utf-8"))
 
 # Reconvertir le dictionnaire en chaine de caractere pour le traiter ensuite
-json_str = json.dumps(json_data)
+#json_str = json.dumps(json_data)
 
 # Utilisation de la fonction unidecode pour enlever les accents et autres caractères spéciaux
-json_data = (unidecode(json_str))
+#json_data = (unidecode(json_str))
 
 # Conversion de la chaine de caractere JSON à nouveau en dictionnaire Python
 # Le dictionnaire python est plus pratique à manipuler que la chaine de caractère car il est structuré
-json_dict = json.loads(json_data)
+#json_dict = json.loads(json_data)
 
 """
 La méthode generate_class_hierarchy permet de générer une hiérarchie des classes en utilisant un dictionnaire comme entrée.
@@ -27,6 +28,23 @@ Elle prend les arguments suivant:
 def generate_class_hierarchy(json_dict :dict, superclass_name:str=None,superclass_args:list=[]):
     # Initialisation de la chaîne de caractères contenant les définitions de classes
     class_defs = ""
+
+    for class_name in json_dict.keys():
+         nom_attributs = json_dict[class_name]
+         #if "subClasses" in nom_attributs:
+            #subclasses = json_dict[class_name]["subclasses"]
+            #nom_attributs.remove("subclasses")
+         class_def = generate_class_def(class_name,nom_attributs,superclass_name,superclass_args)
+         class_defs += class_def
+
+         if "subclasses" in nom_attributs.keys():
+                super_attr = list(nom_attributs.keys()) + superclass_args
+                super_attr.remove("subclasses")
+                #for sc in json_dict[class_name]["subclasses"].keys():
+                    #print (f"sc = {sc}")
+                g = generate_class_hierarchy(json_dict[class_name]["subclasses"],class_name,super_attr)
+                class_defs += g
+    return class_defs
 
     """ 
     Itération sur les éléments du dictionnaire
@@ -68,3 +86,7 @@ def write_content(content,filename):
 # Appeler la méthode generate_class_hierarchy pour générer le code des classes automatiquement en se basant sur le dictionnaire json_dict
 # Stocker le résultat de la classe dans une variable
 # Appeler la fonction write_content pour stocker le code des classes dans un fichier Python 'product_classes.py'
+
+product_classes = generate_class_hierarchy(json_dict)
+write_content(product_classes,"product_classes.py")
+#print (res)
