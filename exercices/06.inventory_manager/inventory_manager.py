@@ -1,11 +1,15 @@
 #La classe "InventoryManager" est une classe qui permet de gérer un inventaire de produits. 
+from exercices.Inventory.product_classes import *
+from exercices.Inventory.inventory_product_entry import *
+from exercices.Inventory.class_generation import *
+
 
 class InventoryManager:
     # Initialisation de la classe
     def __init__(self):
         # Vous initialisez un dictionnaire 'inventory' qui stocke l'inventaire de tous les produits
         # Il prend comme clé le nom du produit, et la valeur est un objet InventoryProductEntry
-        self.inventory : Dict[str, InventoryProductEntry] = {}
+        self.inventory : dict[str, InventoryProductEntry] = {}
 
     #Méthode product_exists
     """"
@@ -13,6 +17,10 @@ class InventoryManager:
     Si c'est le cas, la fonction retourne True, sinon elle retourne False.
     """
     def product_exists(self,product:Product):
+        for inventory_product_entry_key in self.inventory:
+            if inventory_product_entry_key == product.name:
+                return True
+        return False
         """
         pour chaque 'inventory_product_entry_key' dans self.inventory faire:
             si 'inventory_product_entry_key' est égal à product.name alors:
@@ -26,6 +34,11 @@ class InventoryManager:
     Elle prend en argument un objet Product et une quantité initiale.
     """
     def add_product(self, product:Product, quantity):
+        if self.product_exists(product):
+            print ("Ce produit existe déjà dans l'inventaire")
+        else:
+            invprod = InventoryProductEntry(product,quantity)
+            self.inventory[product.name] = invprod
         """
         SI le produit existe déjà dans l'inventaire: 
             afficher un message pour informer l'utilisateur
@@ -43,6 +56,10 @@ class InventoryManager:
         #Utiliser la méthode product_exists pour vérifier si le produit existe dans l'inventaire
         #Si le produit est trouvé, supprimer le de l'inventaire
         #Sinon, afficher un message d'erreur indiquant que le produit n'a pas été trouvé
+        if product_name in self.inventory:
+            self.inventory.pop(product_name)
+        else:
+            print (f"Le produit n'a pas été trouvé")
     
     #Méthode sell_product
     """
@@ -55,6 +72,11 @@ class InventoryManager:
         #Pour chaque itération, on vérifie si le nom du produit fourni est équal à la clé du dictionnaire.
         #Si le produit est trouvé, appeler la méthode 'sell' de l'objet InventoryProductEntry correspondant avec la quantité à vendre
         #Sinon, afficher un message d'erreur indiquant que la vente a échoué
+        for p in self.inventory:
+            if p == product_name:
+                self.inventory[p].sell(quantity)
+                return True
+        print (f"La vente a échouée")
     
     #Méthode restock_product
     """
@@ -66,7 +88,7 @@ class InventoryManager:
         #Si le produit est trouvé, appeler la méthode 'restock' de l'objet InventoryProductEntry correspondant avec la quantité à restocker
         #Si le réapprovisionnement est réussi, afficher un message de confirmation
         #Sinon, on appelle la méthode add_product pour ajouter le produit en stock avec une quantité nulle et on rappelle la fonction restock_product pour le restocker
-    
+        
     
     #Méthode get_product
     """

@@ -1,19 +1,19 @@
 # Vous allez créer une classe InventoryProductEntry qui a pour role 
 # de représenter une entrée d'inventaire pour un produit spécifique.
-from Inventory.product_classes import *
+from product_classes import *
 
 class InventoryProductEntry:
     # Initialisation de la classe, en prenant en argument un objet Product et une quantité initiale
     def __init__(self, product, quantity):
         self.product = product
         self.quantity = quantity
+        self.sales = 0
+        self.expenses = 0
         """
         'product' : un objet de type produit qui rassemble les différents attributs et caractéristiques de ce dernier
         'quantity' : un entier qui représente le nombre des pièces du produit en question
         """
         # Initialisation des variables
-        self.sales = 0
-        self.expenses = 0
         """
         Vous devez initialiser deux variables. 
         la variable 'sales' qui stocke le total des revenues des ventes du produit
@@ -29,6 +29,13 @@ class InventoryProductEntry:
     """
     def sell(self, quantity):
         #Avant de mettre à jour l'état du stocke du produit, on doit vérifier si on a déjà une quantité suffisante à vendre.
+        if quantity > self.quantity:
+            print (f"Le stock du produit {self.product.name} est insuffisant.")
+            return False
+        else:
+            self.quantity -= quantity
+            self.sales += quantity * self.product.price
+            return True
         """
         En utilisant des conditions, vérifier: 
 
@@ -41,13 +48,6 @@ class InventoryProductEntry:
             Retourner Vrai
         
         """
-        if quantity > self.quantity:
-            print (f"Le stock du produit {self.product.name} est insuffisant.")
-            return False
-        else:
-            self.quantity -= quantity
-            self.sales += quantity * self.product.price
-            return True
     
     #Méthode Restock
     """
@@ -63,11 +63,11 @@ class InventoryProductEntry:
         self.expenses += quantity * self.product.cost
 
     #Méthode repr
-    def __repr__(self):
-        """
-        La méthode repr est utilisée pour fournir une représentation en chaîne de caractères de l'objet InventoryProductEntry, 
-        qui contient des informations utiles telles que le nom du produit, la marque, la quantité en stock et le prix du produit.
+    """
+    La méthode repr est utilisée pour fournir une représentation en chaîne de caractères de l'objet InventoryProductEntry, 
+    qui contient des informations utiles telles que le nom du produit, la marque, la quantité en stock et le prix du produit.
 
-        """
+    """
+    def __repr__(self):
         return f"nom : {self.product.name}, marque : {self.product.marque}, quantité en stock : {self.quantity}, prix : {self.product.price}"
         # Retourner une chaîne de caractères formatée contenant le nom du produit, la marque, la quantité en stock et le prix du produit.

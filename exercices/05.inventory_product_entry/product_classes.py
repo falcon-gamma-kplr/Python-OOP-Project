@@ -42,12 +42,12 @@ class Refrigerateur(Appareils_Electromenagers):
 		super().__init__(capacite, cost, price, marque)
 		self.efficacite = efficacite
 
-class Lave-vaisselle(Appareils_Electromenagers):
+class Lave_vaisselle(Appareils_Electromenagers):
 	def __init__(self, programme, capacite, cost, price, marque):
 		super().__init__(capacite, cost, price, marque)
 		self.programme = programme
 
-class Lave-linge(Appareils_Electromenagers):
+class Lave_linge(Appareils_Electromenagers):
 	def __init__(self, programme, capacite, cost, price, marque):
 		super().__init__(capacite, cost, price, marque)
 		self.programme = programme
